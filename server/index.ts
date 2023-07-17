@@ -2,6 +2,7 @@ import express from 'express'; // фреймворк для работы с Node
 import mongoose from 'mongoose'; // работа с MongoDB
 import dotenv from 'dotenv'; // переменные окружения .env
 import cors from 'cors'; // для работы бэкэнда с разными ip адресами
+import authRouter from './routes/auth.js';
 
 const app = express();
 dotenv.config();
@@ -16,10 +17,13 @@ app.get('/', (req, res) => {
     res.json({ message: 'Ok' });
 });
 
+// Routes
+app.use('/api/auth', authRouter);
+
 async function start() {
     try {
         await mongoose.connect(
-            `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_NAME}/`
+            `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_NAME}`
         );
         app.listen(PORT, () => {
             console.log(`server is running (${PORT})...`);
