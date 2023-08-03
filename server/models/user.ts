@@ -12,6 +12,14 @@ const UserSchema = new Schema(
             type: String,
             required: true,
         },
+        role: {
+            type: Schema.Types.ObjectId,
+            ref: 'Roles',
+        },
+        active: {
+            type: Boolean,
+            default: true,
+        },
         posts: [
             {
                 type: Schema.Types.ObjectId,
