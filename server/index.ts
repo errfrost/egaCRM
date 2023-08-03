@@ -3,6 +3,7 @@ import mongoose from 'mongoose'; // работа с MongoDB
 import dotenv from 'dotenv'; // переменные окружения .env
 import cors from 'cors'; // для работы бэкэнда с разными ip адресами
 import authRouter from './routes/auth.js';
+import installRouter from './routes/install.js';
 
 const app = express();
 dotenv.config();
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRouter);
+app.use('/api/install', installRouter);
 
 async function start() {
     try {
