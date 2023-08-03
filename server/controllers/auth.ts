@@ -16,9 +16,22 @@ export const register = async (req: Request, res: Response) => {
 
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(password, salt);
-        const newUser = new User({ username, password: hash });
-        await newUser.save();
-        return res.json({ newUser, message: 'Регистрация прошла успешно' });
+        const user = new User({ username, password: hash });
+        const token = jwt.sign(
+            // eslint-disable-next-line no-underscore-dangle
+            { id: user._id },
+            process.env.JWT_SECRET as string,
+            {
+                expiresIn: '30d',
+            }
+        );
+
+        await user.save();
+        return res.json({
+            user,
+            token,
+            message: 'Регистрация прошла успешно',
+        });
     } catch (error) {
         return res.status(400).json({ message: error });
     }
@@ -46,7 +59,7 @@ export const login = async (req: Request, res: Response) => {
             }
         );
 
-        return res.json({ token, user, message: 'Пользователь авторизован' });
+        return res.json({ user, token, message: 'Пользователь авторизован' });
     } catch (error) {
         return res.status(400).json({ message: error });
     }
