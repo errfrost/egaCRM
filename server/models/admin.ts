@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
-const UserSchema = new Schema(
+const AdminSchema = new Schema(
     {
         username: {
             type: String,
@@ -20,14 +20,8 @@ const UserSchema = new Schema(
             type: Boolean,
             default: true,
         },
-        posts: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'Post', // ссылка на другую схему - Post
-            },
-        ],
     },
     { timestamps: true }
 );
 
-export default mongoose.model('User', UserSchema);
+export default mongoose.model('Admin', AdminSchema);

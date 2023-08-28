@@ -1,14 +1,14 @@
 import { Response, Request } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt, { Secret } from 'jsonwebtoken';
-import User from '../models/user.js';
+import Admin from '../models/admin.js';
 
-// Register user
+// Register admin
 export const register = async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body;
 
-        const isUsed = await User.findOne({ username });
+        const isUsed = await Admin.findOne({ username });
         if (isUsed)
             return res.status(402).json({
                 message: 'Пользователь с данным именем уже существует',
@@ -16,19 +16,19 @@ export const register = async (req: Request, res: Response) => {
 
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(password, salt);
-        const user = new User({ username, password: hash });
+        const admin = new Admin({ username, password: hash });
         const token = jwt.sign(
             // eslint-disable-next-line no-underscore-dangle
-            { id: user._id },
+            { id: admin._id },
             process.env.JWT_SECRET as string,
             {
                 expiresIn: '30d',
             }
         );
 
-        await user.save();
+        await admin.save();
         return res.json({
-            user,
+            admin,
             token,
             message: 'Регистрация прошла успешно',
         });
@@ -37,29 +37,32 @@ export const register = async (req: Request, res: Response) => {
     }
 };
 
-// Login user
+// Login admin
 export const login = async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body;
 
-        const user = await User.findOne({ username });
-        if (!user)
+        const admin = await Admin.findOne({ username });
+        if (!admin)
             return res.status(402).json({ message: 'Пользователь не найден' });
 
-        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        const isPasswordCorrect = await bcrypt.compare(
+            password,
+            admin.password
+        );
         if (!isPasswordCorrect)
             return res.status(402).json({ message: 'Неверный пароль' });
 
         const token = jwt.sign(
             // eslint-disable-next-line no-underscore-dangle
-            { id: user._id },
+            { id: admin._id },
             process.env.JWT_SECRET as string,
             {
                 expiresIn: '30d',
             }
         );
 
-        return res.json({ user, token, message: 'Пользователь авторизован' });
+        return res.json({ admin, token, message: 'Пользователь авторизован' });
     } catch (error) {
         return res.status(400).json({ message: error });
     }
