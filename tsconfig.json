@@ -25,7 +25,7 @@
 {
     "compilerOptions": {
         "target": "es2016" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-        "module": "ESNext" /* Specify what module code is generated. */,
+        "module": "NodeNext" /* Specify what module code is generated. */,
         "moduleResolution": "nodenext",
         //        "resolveJsonModule": true /* Enable importing .json files */,
         "outDir": "dist" /* Specify an output folder for all emitted files. */,
