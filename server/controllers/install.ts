@@ -61,7 +61,7 @@ const installAbonement = async () => {
 };
 
 // Install DB
-export const install = async (req: Request, res: Response) => {
+const install = async (req: Request, res: Response) => {
     try {
         await installRoles();
         await installAbonement();
@@ -73,3 +73,5 @@ export const install = async (req: Request, res: Response) => {
         return res.status(400).json({ message: error });
     }
 };
+
+export default install;
