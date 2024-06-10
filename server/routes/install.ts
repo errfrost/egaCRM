@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { install } from '../controllers/install.js';
+import install from '../controllers/install.js';
 
 const router = Router();
 
