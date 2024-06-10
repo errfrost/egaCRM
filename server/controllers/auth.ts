@@ -67,9 +67,3 @@ export const login = async (req: Request, res: Response) => {
         return res.status(400).json({ message: error });
     }
 };
-
-// User info
-// export const userInfo = async (req: Request, res: Response) => {
-//     try {
-//     } catch (error) {}
-// };
