@@ -12,6 +12,16 @@ const AdminSchema = new Schema(
             type: String,
             required: true,
         },
+        firstname: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        lastname: {
+            type: String,
+            required: true,
+            unique: true,
+        },
         role: {
             type: Schema.Types.ObjectId,
             ref: 'Roles',
