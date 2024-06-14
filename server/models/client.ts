@@ -18,7 +18,6 @@ const ClientSchema = new Schema(
         },
         sex: {
             type: Boolean,
-            required: true,
         },
         birthDate: {
             type: Date,

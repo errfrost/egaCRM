@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
 import bcrypt from 'bcryptjs';
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import Admin from '../models/admin.js';
 
 // Register admin
@@ -19,7 +19,7 @@ export const register = async (req: Request, res: Response) => {
         const admin = new Admin({ username, password: hash });
         const token = jwt.sign(
             // eslint-disable-next-line no-underscore-dangle
-            { id: admin._id },
+            { admin: username },
             process.env.JWT_SECRET as string,
             {
                 expiresIn: '30d',
@@ -55,7 +55,7 @@ export const login = async (req: Request, res: Response) => {
 
         const token = jwt.sign(
             // eslint-disable-next-line no-underscore-dangle
-            { id: admin._id },
+            { admin: admin.username },
             process.env.JWT_SECRET as string,
             {
                 expiresIn: '30d',
