@@ -2,10 +2,10 @@ import express from 'express'; // фреймворк для работы с Node
 import mongoose from 'mongoose'; // работа с MongoDB
 import dotenv from 'dotenv'; // переменные окружения .env
 import cors from 'cors'; // для работы бэкэнда с разными ip адресами
-import authRouter from './routes/auth.js';
-import clientRouter from './routes/client.js';
-import installRouter from './routes/install.js';
-import checkAuth from './utils/checkAuth.js';
+import authRouter from './routes/authRouter.js';
+import clientRouter from './routes/clientRouter.js';
+import installRouter from './routes/installRouter.js';
+import checkAuth from './middlewares/checkAuth.js';
 
 const app = express();
 dotenv.config();
