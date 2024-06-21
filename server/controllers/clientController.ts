@@ -67,7 +67,7 @@ export const getClients = async (req: Request, res: Response) => {
         // const admin = req.headers.Admin;
         // const adminObjectId = await Admin.findOne({ username: admin });
 
-        const clients = await Client.find({});
+        const clients = await Client.find().sort('-createdAt');
 
         if (!clients)
             return res.status(402).json({
