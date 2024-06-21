@@ -2,11 +2,11 @@
     "name": "egacrm-server",
     "version": "1.0.0",
     "description": "",
-    "main": "./server/index.ts",
+    "main": "./server/index.js",
     "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "ts-node --esm ./server/index.ts",
+        "start": "tsx ./server/index.ts",
         "nodemon": "nodemon --esm ./server/index.ts",
         "build": "tsc"
     },
@@ -41,6 +41,7 @@
         "eslint-plugin-react": "^7.32.2",
         "eslint-plugin-react-hooks": "^4.6.0",
         "nodemon": "^2.0.22",
-        "prettier": "^2.8.8"
+        "prettier": "^2.8.8",
+        "tsx": "^4.15.6"
     }
 }
