@@ -52,7 +52,7 @@ export const addClient = async (req: Request, res: Response) => {
     }
 };
 
-// GetClient
+// GetClients
 export const getClients = async (req: Request, res: Response) => {
     try {
         const {
@@ -64,8 +64,6 @@ export const getClients = async (req: Request, res: Response) => {
             phone,
             email,
         } = req.body;
-        // const admin = req.headers.Admin;
-        // const adminObjectId = await Admin.findOne({ username: admin });
 
         const clients = await Client.find().sort('-createdAt');
 
@@ -77,6 +75,27 @@ export const getClients = async (req: Request, res: Response) => {
         return res.json({
             clients,
             message: 'Получен список клиентов',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
+// GetClients
+export const getClient = async (req: Request, res: Response) => {
+    try {
+        const { clientNumber } = req.params;
+
+        const client = await Client.findOne({ clientNumber });
+
+        if (!client)
+            return res.status(402).json({
+                message: 'Клиента по вашему запросу не найдено',
+            });
+
+        return res.json({
+            client,
+            message: 'Получены данные клиента',
         });
     } catch (error) {
         return res.status(400).json({ message: error });
