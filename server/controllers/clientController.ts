@@ -52,6 +52,69 @@ export const addClient = async (req: Request, res: Response) => {
     }
 };
 
+// UpdateClient
+export const updateClient = async (req: Request, res: Response) => {
+    try {
+        const clientID = req.params.clientNumber;
+        const {
+            clientNumber,
+            firstname,
+            lastname,
+            sex,
+            birthDate,
+            phone,
+            email,
+            comment,
+        } = req.body;
+        const admin = req.headers.Admin;
+        const adminObjectId = await Admin.findOne({ username: admin });
+
+        const client = await Client.findOne({
+            clientNumber: clientID,
+        });
+        if (!client)
+            return res.status(402).json({
+                message: 'Клиент по вашему запросу не найден',
+            });
+
+        // Checking if we are trying to use already used clientNumer
+        const isUsedClientNumber = await Client.findOne({ clientNumber });
+        if (
+            isUsedClientNumber &&
+            client._id.toString() !== isUsedClientNumber._id.toString()
+        )
+            return res.status(402).json({
+                message:
+                    'Пользователь с данным клиентским номером уже существует',
+            });
+
+        // Checking if we are trying to use already used firstname and lastname combo
+        const isUsedName = await Client.findOne({ firstname, lastname });
+        if (isUsedName && client._id.toString() !== isUsedName._id.toString())
+            return res.status(402).json({
+                message: 'Пользователь с данным именем уже существует',
+            });
+
+        client.clientNumber = clientNumber;
+        client.firstname = firstname;
+        client.lastname = lastname;
+        client.sex = sex;
+        client.birthDate = birthDate;
+        client.phone = phone;
+        client.email = email;
+        client.comment = comment;
+        client.admin = adminObjectId!._id;
+
+        await client.save();
+        return res.json({
+            client,
+            message: 'Данные клиента изменены',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
 // GetClients
 export const getClients = async (req: Request, res: Response) => {
     try {
