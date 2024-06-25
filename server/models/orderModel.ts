@@ -14,10 +14,12 @@ const OrderSchema = new Schema(
         admin: {
             type: Schema.Types.ObjectId,
             ref: 'Admin',
+            required: true,
         },
         product: {
             type: Schema.Types.ObjectId,
             ref: 'Product',
+            required: true,
         },
     },
     { timestamps: true }

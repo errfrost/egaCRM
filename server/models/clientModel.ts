@@ -38,6 +38,7 @@ const ClientSchema = new Schema(
         admin: {
             type: Schema.Types.ObjectId,
             ref: 'Admin',
+            required: true,
         },
         clientType: {
             type: Schema.Types.ObjectId,
@@ -52,10 +53,6 @@ const ClientSchema = new Schema(
         abonement: {
             type: Schema.Types.ObjectId,
             ref: 'Abonement',
-        },
-        active: {
-            type: Boolean,
-            default: true,
         },
     },
     { timestamps: true }
