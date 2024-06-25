@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
 import Roles from '../models/rolesModel.js';
-import Abonement from '../models/abonementModel.js';
+import AbonementType from '../models/abonementTypeModel.js';
 import ClientType from '../models/clientTypeModel.js';
 
 const installRoles = async () => {
@@ -40,22 +40,22 @@ const installClientTypes = async () => {
     }
 };
 
-const installAbonement = async () => {
+const installAbonementTypes = async () => {
     try {
-        const abonementData = [
+        const abonementTypesData = [
             { abonement: 'Разовый' },
             { abonement: '4 занятия' },
             { abonement: '8 занятий' },
             { abonement: '12 занятий' },
         ];
-        await Abonement.insertMany(abonementData);
+        await AbonementType.insertMany(abonementTypesData);
 
         return {
-            message: 'Инсталляция Abonements прошла успешно',
+            message: 'Инсталляция AbonementType прошла успешно',
         };
     } catch (error) {
         return {
-            message: 'Инсталляция Abonements прошла с ошибкой',
+            message: 'Инсталляция AbonementType прошла с ошибкой',
         };
     }
 };
@@ -64,7 +64,7 @@ const installAbonement = async () => {
 const install = async (req: Request, res: Response) => {
     try {
         await installRoles();
-        await installAbonement();
+        await installAbonementTypes();
         await installClientTypes();
         return res.json({
             message: 'Инсталляция DB прошла успешно',
