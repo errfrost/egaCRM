@@ -7,7 +7,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "tsx ./server/index.ts",
-        "nodemon": "nodemon --esm ./server/index.ts",
+        "nodemon": "tsx watch ./server/",
         "build": "tsc"
     },
     "keywords": [],
