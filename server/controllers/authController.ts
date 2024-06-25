@@ -67,3 +67,18 @@ export const login = async (req: Request, res: Response) => {
         return res.status(400).json({ message: error });
     }
 };
+
+// Get admin by ObjectID
+export const getAdmin = async (req: Request, res: Response) => {
+    try {
+        const { adminID } = req.params;
+
+        const admin = await Admin.findById(adminID);
+        if (!admin)
+            return res.status(402).json({ message: 'Администратор не найден' });
+
+        return res.json({ admin, message: 'Администратор найден' });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
