@@ -1,0 +1,71 @@
+import { Request, Response } from 'express';
+import Product from '../models/productModel.js';
+
+// AddProduct
+export const addProduct = async (req: Request, res: Response) => {
+    try {
+        const { name, category, price, description, count } = req.body;
+
+        const isUsed = await Product.findOne({ name });
+        if (isUsed)
+            return res.status(402).json({
+                message: 'Товар с таким именем уже существует',
+            });
+
+        const newProduct = new Product({
+            name,
+            category,
+            price,
+            description,
+            count,
+        });
+
+        await newProduct.save();
+        return res.json({
+            newProduct,
+            message: 'Добавлен новый товар',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
+// GetProducts
+export const getProducts = async (req: Request, res: Response) => {
+    try {
+        const products = await Product.find();
+
+        if (!products)
+            return res.status(402).json({
+                message: 'Товаров не найдено',
+            });
+
+        return res.json({
+            products,
+            message: 'Получен список товаров',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
+// GetProduct
+export const getProduct = async (req: Request, res: Response) => {
+    try {
+        const { productID } = req.params;
+
+        const product = await Product.findById(productID);
+
+        if (!product)
+            return res.status(402).json({
+                message: 'Товар не найден',
+            });
+
+        return res.json({
+            product,
+            message: 'Товар найден',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};

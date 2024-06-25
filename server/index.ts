@@ -5,6 +5,7 @@ import cors from 'cors'; // для работы бэкэнда с разными
 import authRouter from './routes/authRouter.js';
 import clientRouter from './routes/clientRouter.js';
 import installRouter from './routes/installRouter.js';
+import productRouter from './routes/productRouter.js';
 import checkAuth from './middlewares/checkAuth.js';
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(checkAuth);
 app.use('/api/auth', authRouter);
 app.use('/api/client', clientRouter);
 app.use('/api/install', installRouter);
+app.use('/api/product', productRouter);
 
 async function start() {
     try {
