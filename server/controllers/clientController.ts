@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Client from '../models/client.js';
 import Admin from '../models/admin.js';
+import getAdmin from '../utils/adminUtils.js';
 
 // AddClient
 export const addClient = async (req: Request, res: Response) => {
@@ -118,16 +119,6 @@ export const updateClient = async (req: Request, res: Response) => {
 // GetClients
 export const getClients = async (req: Request, res: Response) => {
     try {
-        const {
-            clientNumber,
-            firstname,
-            lastname,
-            sex,
-            birthDate,
-            phone,
-            email,
-        } = req.body;
-
         const clients = await Client.find().sort('-createdAt');
 
         if (!clients)
@@ -144,7 +135,7 @@ export const getClients = async (req: Request, res: Response) => {
     }
 };
 
-// GetClients
+// GetClientInfo
 export const getClient = async (req: Request, res: Response) => {
     try {
         const { clientNumber } = req.params;
@@ -156,8 +147,11 @@ export const getClient = async (req: Request, res: Response) => {
                 message: 'Клиента по вашему запросу не найдено',
             });
 
+        const admin = await getAdmin(client.admin);
+        const adminUsername = admin?.username;
         return res.json({
             client,
+            adminUsername,
             message: 'Получены данные клиента',
         });
     } catch (error) {
