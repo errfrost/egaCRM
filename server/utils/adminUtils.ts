@@ -1,4 +1,4 @@
-import Admin from '../models/admin.js';
+import Admin from '../models/adminModel.js';
 
 // Get admin by ObjectID
 const getAdmin = async (adminID) => {

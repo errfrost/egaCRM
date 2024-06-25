@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import Client from '../models/client.js';
-import Admin from '../models/admin.js';
+import Client from '../models/clientModel.js';
+import Admin from '../models/adminModel.js';
 import getAdmin from '../utils/adminUtils.js';
 
 // AddClient

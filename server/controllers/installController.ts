@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
-import Roles from '../models/roles.js';
-import Abonement from '../models/abonement.js';
-import ClientType from '../models/clientType.js';
+import Roles from '../models/rolesModel.js';
+import Abonement from '../models/abonementModel.js';
+import ClientType from '../models/clientTypeModel.js';
 
 const installRoles = async () => {
     try {
