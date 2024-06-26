@@ -34,7 +34,7 @@ export const addProduct = async (req: Request, res: Response) => {
 export const updateProduct = async (req: Request, res: Response) => {
     try {
         const { productID } = req.params;
-        const { name, category, price, description, count } = req.body;
+        const { name, category, price, description, count, active } = req.body;
 
         const product = await Product.findOne({
             _id: productID,
@@ -56,6 +56,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         product.price = price;
         product.description = description;
         product.count = count;
+        product.active = active;
 
         await product.save();
         return res.json({
