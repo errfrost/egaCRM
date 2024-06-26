@@ -3,6 +3,7 @@ import {
     addProductCategory,
     getProductCategories,
     getProductCategory,
+    updateProductCategory,
 } from '../controllers/productCategoryController.js';
 import {
     addProduct,
@@ -12,13 +13,15 @@ import {
 
 const router = Router();
 
-router.post('/add', addProduct); // Add new Category
 router.get('/', getProducts); // Get all Categories
-router.get('/:productID', getProduct); // Get ProductCategory by _id
+router.get('/category', getProductCategories); // Get all Categories
 
+router.post('/add', addProduct); // Add new Category
 router.post('/category/add', addProductCategory); // Add new Category
-router.get('/category/', getProductCategories); // Get all Categories
+
+router.get('/:productID', getProduct); // Get ProductCategory by _id
 router.get('/category/:categoryID', getProductCategory); // Get ProductCategory by _id
-// router.put('/:clientNumber', updateClient); // Update client
+
+router.put('/category/:categoryID', updateProductCategory); // Update product category
 
 export default router;
