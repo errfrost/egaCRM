@@ -30,6 +30,43 @@ export const addProduct = async (req: Request, res: Response) => {
     }
 };
 
+// UpdateProduct
+export const updateProduct = async (req: Request, res: Response) => {
+    try {
+        const { productID } = req.params;
+        const { name, category, price, description, count } = req.body;
+
+        const product = await Product.findOne({
+            _id: productID,
+        });
+        if (!product)
+            return res.status(402).json({
+                message: 'Товар не найден',
+            });
+
+        // Checking if we are trying to use already used product
+        const isUsed = await Product.findOne({ name });
+        if (isUsed && product._id.toString() !== isUsed._id.toString())
+            return res.status(402).json({
+                message: 'Товар с данным именем уже существует',
+            });
+
+        product.name = name;
+        product.category = category;
+        product.price = price;
+        product.description = description;
+        product.count = count;
+
+        await product.save();
+        return res.json({
+            product,
+            message: 'Товар изменен',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
 // GetProducts
 export const getProducts = async (req: Request, res: Response) => {
     try {

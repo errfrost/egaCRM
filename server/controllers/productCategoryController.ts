@@ -27,7 +27,7 @@ export const addProductCategory = async (req: Request, res: Response) => {
     }
 };
 
-// UpdateClient
+// UpdateProductCategory
 export const updateProductCategory = async (req: Request, res: Response) => {
     try {
         const { categoryID } = req.params;
