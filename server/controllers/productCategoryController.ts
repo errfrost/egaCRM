@@ -65,7 +65,7 @@ export const updateProductCategory = async (req: Request, res: Response) => {
 // GetCategories
 export const getProductCategories = async (req: Request, res: Response) => {
     try {
-        const categories = await ProductCategory.find().sort('-createdAt');
+        const categories = await ProductCategory.find().sort('category');
 
         if (!categories)
             return res.status(402).json({
