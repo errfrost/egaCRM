@@ -3,22 +3,31 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 const OrderSchema = new Schema(
     {
-        summ: {
-            type: Number,
-            required: true,
-        },
         client: {
             type: Schema.Types.ObjectId,
             ref: 'Client',
         },
-        admin: {
-            type: Schema.Types.ObjectId,
-            ref: 'Admin',
-            required: true,
-        },
         product: {
             type: Schema.Types.ObjectId,
             ref: 'Product',
+            required: true,
+        },
+        summ: {
+            type: Number,
+            required: true,
+        },
+        count: {
+            type: Number,
+            required: true,
+        },
+        status: {
+            type: String,
+            required: true,
+            default: 'ok', // 'canceled', 'credit'
+        },
+        admin: {
+            type: Schema.Types.ObjectId,
+            ref: 'Admin',
             required: true,
         },
     },
