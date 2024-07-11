@@ -7,6 +7,7 @@ import clientRouter from './routes/clientRouter.js';
 import installRouter from './routes/installRouter.js';
 import productRouter from './routes/productRouter.js';
 import cartRouter from './routes/cartRouter.js';
+import orderRouter from './routes/orderRouter.js';
 import checkAuth from './middlewares/checkAuth.js';
 
 const app = express();
@@ -29,6 +30,7 @@ app.use('/api/client', clientRouter);
 app.use('/api/install', installRouter);
 app.use('/api/product', productRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/order', orderRouter);
 
 async function start() {
     try {
