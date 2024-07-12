@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import Order from '../models/orderModel.js';
+import Client from '../models/clientModel.js';
 
-// GetProducts
+// GetOrders
 export const getOrders = async (req: Request, res: Response) => {
     try {
         const orders = await Order.find()
@@ -23,11 +24,30 @@ export const getOrders = async (req: Request, res: Response) => {
     }
 };
 
-// GetOrder
-export const getOrder = async (req: Request, res: Response) => {
+// GetClientOrders
+export const getClientOrders = async (req: Request, res: Response) => {
     try {
+        const { clientNumber } = req.params;
+        const clientID = await Client.findOne({ clientNumber });
+
+        if (!clientID)
+            return res.status(402).json({
+                message: 'Клиент не найден',
+            });
+
+        const orders = await Order.find({ client: clientID })
+            .populate('client')
+            .populate('product')
+            .populate('admin')
+            .exec();
+        if (!orders)
+            return res.status(402).json({
+                message: 'Покупок не найдено',
+            });
+
         return res.json({
-            message: 'Товар найден',
+            orders,
+            message: 'Получен список покупок клиента',
         });
     } catch (error) {
         return res.status(400).json({ message: error });
