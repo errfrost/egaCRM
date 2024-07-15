@@ -8,11 +8,6 @@ const AbonementSchema = new Schema(
             required: true,
             unique: true,
         },
-        abonementType: {
-            type: Schema.Types.ObjectId,
-            ref: 'AbonementType',
-            required: true,
-        },
         startDate: {
             type: Date,
             required: true,
@@ -21,7 +16,11 @@ const AbonementSchema = new Schema(
             type: Date,
             required: true,
         },
-        activeLessons: {
+        maxLessons: {
+            type: Number,
+            required: true,
+        },
+        usedLessons: {
             type: Number,
             required: true,
         },

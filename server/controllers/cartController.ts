@@ -14,6 +14,16 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
         const client = await Client.findOne({ clientNumber });
         const product = await Product.findById(productID);
 
+        if (!adminID)
+            return res.status(402).json({
+                message: 'Админ не найден',
+            });
+
+        if (!client)
+            return res.status(402).json({
+                message: 'Клиент не найден',
+            });
+
         // проверить есть ли такое количество товара
         if (!product)
             return res.status(402).json({
@@ -27,12 +37,14 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
                 .status(400)
                 .json({ message: 'Недостаточно товара на складе' });
 
+        // проверить если товар - это абонемент, то добавить в абонемент запись
+
         const newOrder = new Order({
-            client: client?._id,
+            client: client._id,
             product: productID,
             summ,
             count,
-            admin: adminID?._id,
+            admin: adminID._id,
         });
 
         await newOrder.save();

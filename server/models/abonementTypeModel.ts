@@ -8,6 +8,10 @@ const AbonementTypeSchema = new Schema(
             required: true,
             unique: true,
         },
+        lessons: {
+            type: Number,
+            required: true,
+        },
     },
     { timestamps: true }
 );

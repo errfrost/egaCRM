@@ -11,6 +11,11 @@ const ProductCategorySchema = new Schema(
         description: {
             type: String,
         },
+        abonement: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
         active: {
             type: Boolean,
             required: true,

@@ -4,7 +4,14 @@ import Product from '../models/productModel.js';
 // AddProduct
 export const addProduct = async (req: Request, res: Response) => {
     try {
-        const { name, category, price, description, count } = req.body;
+        const {
+            name,
+            category,
+            price,
+            description,
+            count,
+            abonementLessonsCount,
+        } = req.body;
 
         const isUsed = await Product.findOne({ name });
         if (isUsed)
@@ -18,11 +25,12 @@ export const addProduct = async (req: Request, res: Response) => {
             price,
             description,
             count,
+            abonementLessonsCount,
         });
 
         await newProduct.save();
         return res.json({
-            newProduct,
+            product: newProduct,
             message: 'Добавлен новый товар',
         });
     } catch (error) {
@@ -34,7 +42,15 @@ export const addProduct = async (req: Request, res: Response) => {
 export const updateProduct = async (req: Request, res: Response) => {
     try {
         const { productID } = req.params;
-        const { name, category, price, description, count, active } = req.body;
+        const {
+            name,
+            category,
+            price,
+            description,
+            count,
+            abonementLessonsCount,
+            active,
+        } = req.body;
 
         const product = await Product.findOne({
             _id: productID,
@@ -56,6 +72,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         product.price = price;
         product.description = description;
         product.count = count;
+        product.abonementLessonsCount = abonementLessonsCount;
         product.active = active;
 
         await product.save();

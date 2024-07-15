@@ -24,6 +24,11 @@ const ProductSchema = new Schema(
             required: true,
             default: 0,
         },
+        abonementLessonsCount: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
         active: {
             type: Boolean,
             required: true,
