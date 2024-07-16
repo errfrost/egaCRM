@@ -3,6 +3,8 @@ import Order from '../models/orderModel.js';
 import Admin from '../models/adminModel.js';
 import Client from '../models/clientModel.js';
 import Product from '../models/productModel.js';
+import ProductCategory from '../models/productCategoryModel.js';
+import addAbonement from '../utils/abonementUtils.js';
 
 // SellProduct при условии передачи корзины поэлементно
 export const sellProduct2Client = async (req: Request, res: Response) => {
@@ -37,8 +39,6 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
                 .status(400)
                 .json({ message: 'Недостаточно товара на складе' });
 
-        // проверить если товар - это абонемент, то добавить в абонемент запись
-
         const newOrder = new Order({
             client: client._id,
             product: productID,
@@ -52,6 +52,18 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
         // отнять количество товара из наличия
         product.count -= count;
         await product.save();
+
+        // проверить если товар - это абонемент, то добавить в абонемент запись
+        const productCategory = await ProductCategory.findOne({
+            _id: product.category,
+        });
+        if (productCategory?.abonement) {
+            addAbonement(
+                client._id,
+                newOrder._id,
+                product.abonementLessonsCount
+            );
+        }
 
         return res.json({
             newOrder,

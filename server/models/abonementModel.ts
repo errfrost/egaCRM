@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 const AbonementSchema = new Schema(
     {
-        clientNumber: {
-            type: String,
+        client: {
+            type: Schema.Types.ObjectId,
+            ref: 'Client',
             required: true,
-            unique: true,
         },
         startDate: {
             type: Date,
@@ -23,6 +23,7 @@ const AbonementSchema = new Schema(
         usedLessons: {
             type: Number,
             required: true,
+            default: 0,
         },
         order: {
             type: Schema.Types.ObjectId,
