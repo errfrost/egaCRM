@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 const ScheduleTemplateSchema = new Schema(
     {
+        scheduleID: {
+            type: Number,
+            required: true,
+            unique: true,
+        },
         weekDay: {
             type: Number,
             required: true,
@@ -18,7 +23,6 @@ const ScheduleTemplateSchema = new Schema(
         teacher: {
             type: Schema.Types.ObjectId,
             ref: 'Teacher',
-            required: true,
         },
         lessonName: {
             type: String,

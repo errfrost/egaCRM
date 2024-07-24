@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import Product from '../models/productModel.js';
 import Client from '../models/clientModel.js';
 import Abonement from '../models/abonementModel.js';
 
