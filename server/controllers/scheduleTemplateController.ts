@@ -11,7 +11,7 @@ export const getScheduleLessons = async (req: Request, res: Response) => {
 
         return res.json({
             scheduleLessons,
-            message: 'Получен список занятий',
+            message: 'Получен список занятий шаблона расписания',
         });
     } catch (error) {
         return res.status(400).json({ message: error });
@@ -32,6 +32,27 @@ export const getScheduleTemplate = async (req: Request, res: Response) => {
         return res.json({
             scheduleTemplate,
             message: 'Получен шаблон расписания',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
+export const getTimeRecord = async (req: Request, res: Response) => {
+    try {
+        const { scheduleID } = req.params;
+
+        const timeRecord = await ScheduleTemplate.findOne({
+            scheduleID,
+        });
+        if (!timeRecord)
+            return res.status(402).json({
+                message: 'Запись шаблона расписания не найдена',
+            });
+
+        return res.json({
+            timeRecord,
+            message: 'Получена запись шаблона расписания',
         });
     } catch (error) {
         return res.status(400).json({ message: error });
@@ -87,6 +108,28 @@ export const addTimeRecord = async (req: Request, res: Response) => {
     }
 };
 
+export const deleteTimeRecord = async (req: Request, res: Response) => {
+    try {
+        const { scheduleID } = req.params;
+        const timeRecord = await ScheduleTemplate.findOne({
+            scheduleID,
+        });
+
+        if (!timeRecord)
+            return res.status(402).json({
+                message: 'Записи по вашему запросу не найдено',
+            });
+
+        await timeRecord.deleteOne();
+        return res.json({
+            timeRecord,
+            message: 'Запись в шаблоне расписания удалена',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
 export const updateTimeRecord = async (req: Request, res: Response) => {
     try {
         const { scheduleID } = req.params;
@@ -104,6 +147,7 @@ export const updateTimeRecord = async (req: Request, res: Response) => {
         // нужно проверить не занято ли уже данное время
         const weekDayRecords = await ScheduleTemplate.find({ weekDay });
         const isBookedTime: number = weekDayRecords.reduce((acc, record) => {
+            if (scheduleID == record.scheduleID) return acc;
             if (
                 (startTime >= record.startTime &&
                     startTime <= record.endTime) ||
@@ -128,7 +172,7 @@ export const updateTimeRecord = async (req: Request, res: Response) => {
         await timeRecord.save();
         return res.json({
             timeRecord,
-            message: 'Расписание изменено',
+            message: 'Запись в шаблоне расписания изменена',
         });
     } catch (error) {
         return res.status(400).json({ message: error });
