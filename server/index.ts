@@ -11,6 +11,7 @@ import orderRouter from './routes/orderRouter.js';
 import teacherRouter from './routes/teacherRouter.js';
 import abonementRouter from './routes/abonementRouter.js';
 import scheduleTemplateRouter from './routes/scheduleTemplateRouter.js';
+import scheduleRouter from './routes/scheduleRouter.js';
 import checkAuth from './middlewares/checkAuth.js';
 
 const app = express();
@@ -37,6 +38,7 @@ app.use('/api/order', orderRouter);
 app.use('/api/teacher', teacherRouter);
 app.use('/api/abonement', abonementRouter);
 app.use('/api/schedule/template', scheduleTemplateRouter);
+app.use('/api/schedule', scheduleRouter);
 
 async function start() {
     try {

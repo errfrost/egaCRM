@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 const ScheduleSchema = new Schema(
     {
-        datetime: {
-            type: Date,
+        weekDay: {
+            type: Number,
             required: true,
         },
         startTime: {
@@ -18,7 +18,6 @@ const ScheduleSchema = new Schema(
         teacher: {
             type: Schema.Types.ObjectId,
             ref: 'Teacher',
-            required: true,
         },
         lessonName: {
             type: String,
@@ -32,7 +31,6 @@ const ScheduleSchema = new Schema(
             {
                 type: Schema.Types.ObjectId,
                 ref: 'Client',
-                required: true,
             },
         ],
         // в payment содержится массив стоимостей, которые инструктор получает с каждого отмеченного клиента
@@ -46,7 +44,6 @@ const ScheduleSchema = new Schema(
             {
                 type: Schema.Types.ObjectId,
                 ref: 'Client',
-                required: true,
             },
         ],
     },
