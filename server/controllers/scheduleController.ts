@@ -147,17 +147,15 @@ export const getTimeRecord = async (req: Request, res: Response) => {
     try {
         const { scheduleID } = req.params;
 
-        const timeRecord = await ScheduleTemplate.findOne({
-            scheduleID,
-        });
+        const timeRecord = await Schedule.findById(scheduleID);
         if (!timeRecord)
             return res.status(402).json({
-                message: 'Запись шаблона расписания не найдена',
+                message: 'Запись расписания не найдена',
             });
 
         return res.json({
             timeRecord,
-            message: 'Получена запись шаблона расписания',
+            message: 'Получена запись расписания',
         });
     } catch (error) {
         return res.status(400).json({ message: error });
@@ -170,31 +168,33 @@ export const addTimeRecord = async (req: Request, res: Response) => {
             req.body;
 
         // нужно проверить не занято ли уже данное время
-        const weekDayRecords = await ScheduleTemplate.find({ weekDay });
-        const isBookedTime: number = weekDayRecords.reduce((acc, record) => {
-            if (
-                (startTime >= record.startTime &&
-                    startTime <= record.endTime) ||
-                (endTime >= record.startTime && endTime <= record.endTime)
-            ) {
-                return acc + 1;
-            }
-            return acc;
-        }, 0);
+        const isBookedTime = await Schedule.find({
+            $or: [
+                {
+                    startTime: {
+                        $lt: startTime,
+                    },
+                    endTime: {
+                        $gt: startTime,
+                    },
+                },
+                {
+                    startTime: {
+                        $lt: endTime,
+                    },
+                    endTime: {
+                        $gt: endTime,
+                    },
+                },
+            ],
+        }).exec();
 
-        if (isBookedTime > 0)
+        if (isBookedTime.length > 0)
             return res.status(402).json({
                 message: 'Данное время уже занято',
             });
 
-        const lastTimeRecord = await ScheduleTemplate.findOne()
-            .sort('-scheduleID')
-            .exec();
-        let scheduleID = 1;
-        if (lastTimeRecord) scheduleID = lastTimeRecord.scheduleID + 1;
-
-        const timeRecord = new ScheduleTemplate({
-            scheduleID,
+        const timeRecord = new Schedule({
             weekDay,
             startTime,
             endTime,
@@ -206,7 +206,7 @@ export const addTimeRecord = async (req: Request, res: Response) => {
         await timeRecord.save();
         return res.json({
             timeRecord,
-            message: 'В шаблон расписания добавлена новая запись',
+            message: 'В расписание добавлена новая запись',
         });
     } catch (error) {
         return res.status(400).json({ message: error });
@@ -216,9 +216,7 @@ export const addTimeRecord = async (req: Request, res: Response) => {
 export const deleteTimeRecord = async (req: Request, res: Response) => {
     try {
         const { scheduleID } = req.params;
-        const timeRecord = await ScheduleTemplate.findOne({
-            scheduleID,
-        });
+        const timeRecord = await Schedule.findById(scheduleID);
 
         if (!timeRecord)
             return res.status(402).json({
@@ -228,7 +226,7 @@ export const deleteTimeRecord = async (req: Request, res: Response) => {
         await timeRecord.deleteOne();
         return res.json({
             timeRecord,
-            message: 'Запись в шаблоне расписания удалена',
+            message: 'Запись в расписании удалена',
         });
     } catch (error) {
         return res.status(400).json({ message: error });
@@ -241,28 +239,35 @@ export const updateTimeRecord = async (req: Request, res: Response) => {
         const { weekDay, startTime, endTime, teacher, lessonName, lessonType } =
             req.body;
 
-        const timeRecord = await ScheduleTemplate.findOne({
-            scheduleID,
-        });
+        const timeRecord = await Schedule.findById(scheduleID);
         if (!timeRecord)
             return res.status(402).json({
                 message: 'Записи по вашему запросу не найдено',
             });
 
         // нужно проверить не занято ли уже данное время
-        const weekDayRecords = await ScheduleTemplate.find({ weekDay });
-        const isBookedTime: number = weekDayRecords.reduce((acc, record) => {
-            if (scheduleID == record.scheduleID) return acc;
-            if (
-                (startTime >= record.startTime &&
-                    startTime <= record.endTime) ||
-                (endTime >= record.startTime && endTime <= record.endTime)
-            ) {
-                return acc + 1;
-            }
-            return acc;
-        }, 0);
-        if (isBookedTime > 0)
+        const isBookedTime = await Schedule.find({
+            $or: [
+                {
+                    startTime: {
+                        $lt: startTime,
+                    },
+                    endTime: {
+                        $gt: startTime,
+                    },
+                },
+                {
+                    startTime: {
+                        $lt: endTime,
+                    },
+                    endTime: {
+                        $gt: endTime,
+                    },
+                },
+            ],
+        }).exec();
+
+        if (isBookedTime.length > 0)
             return res.status(402).json({
                 message: 'Данное время уже занято',
             });
@@ -277,7 +282,7 @@ export const updateTimeRecord = async (req: Request, res: Response) => {
         await timeRecord.save();
         return res.json({
             timeRecord,
-            message: 'Запись в шаблоне расписания изменена',
+            message: 'Запись в расписании изменена',
         });
     } catch (error) {
         return res.status(400).json({ message: error });
