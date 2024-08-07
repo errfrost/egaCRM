@@ -15,15 +15,22 @@ const checkAuth: RequestHandler = (
     if (authHeader) {
         const [type, token] = authHeader.split(' ');
 
-        const decodedJWT = jwt.verify(token, process.env.JWT_SECRET as string);
-        if (type === 'Bearer' && decodedJWT) {
-            const { admin } = decodedJWT as JwtPayload;
-            req.headers.Admin = admin;
-            return next();
+        try {
+            const decodedJWT = jwt.verify(
+                token,
+                process.env.JWT_SECRET as string
+            );
+            if (type === 'Bearer' && decodedJWT) {
+                const { admin } = decodedJWT as JwtPayload;
+                req.headers.Admin = admin;
+                return next();
+            }
+        } catch {
+            return res.status(401).json({ message: 'Invalid token' });
         }
     }
 
-    return res.status(403).json({ message: 'Invalid token' });
+    return res.status(401).json({ message: 'Invalid token' });
 };
 
 export default checkAuth;
