@@ -44,16 +44,6 @@ const ClientSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'ClientType',
         },
-        // clientOrders: [
-        //     {
-        //         type: Schema.Types.ObjectId,
-        //         ref: 'Orders',
-        //     },
-        // ],
-        abonement: {
-            type: Schema.Types.ObjectId,
-            ref: 'Abonement',
-        },
     },
     { timestamps: true }
 );
