@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import Teacher from '../models/teacherModel.js';
-import Admin from '../models/adminModel.js';
-import getAdmin from '../utils/adminUtils.js';
 
 // AddTeacher
 export const addTeacher = async (req: Request, res: Response) => {
@@ -16,8 +14,6 @@ export const addTeacher = async (req: Request, res: Response) => {
             comment,
             rate,
         } = req.body;
-        const admin = req.headers.Admin;
-        const adminObjectId = await Admin.findOne({ username: admin });
 
         const lastTeacher = await Teacher.findOne();
         let lastTeacherNumber = 1;
@@ -33,7 +29,6 @@ export const addTeacher = async (req: Request, res: Response) => {
             email,
             comment,
             rate,
-            admin: adminObjectId!._id,
         });
 
         await teacher.save();
@@ -62,8 +57,6 @@ export const updateTeacher = async (req: Request, res: Response) => {
             rate,
             active,
         } = req.body;
-        const admin = req.headers.Admin;
-        const adminObjectId = await Admin.findOne({ username: admin });
 
         const teacher = await Teacher.findOne({
             teacherNumber: teacherID,
@@ -96,7 +89,6 @@ export const updateTeacher = async (req: Request, res: Response) => {
         teacher.comment = comment;
         teacher.rate = rate;
         teacher.active = active;
-        teacher.admin = adminObjectId!._id;
 
         await teacher.save();
         return res.json({
@@ -138,11 +130,8 @@ export const getTeacher = async (req: Request, res: Response) => {
                 message: 'Инструктора по вашему запросу не найдено',
             });
 
-        const admin = await getAdmin(teacher.admin);
-        const adminUsername = admin?.username;
         return res.json({
             teacher,
-            adminUsername,
             message: 'Получены данные инструктора',
         });
     } catch (error) {

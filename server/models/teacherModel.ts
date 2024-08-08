@@ -45,11 +45,6 @@ const TeacherSchema = new Schema(
             required: true,
             default: true,
         },
-        admin: {
-            type: Schema.Types.ObjectId,
-            ref: 'Admin',
-            required: true,
-        },
     },
     { timestamps: true }
 );
