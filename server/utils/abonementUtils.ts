@@ -1,4 +1,5 @@
 import Abonement from '../models/abonementModel.js';
+import { clearTimeInDate } from './date.js';
 
 const addAbonement = async (client, order, maxLessons) => {
     try {
@@ -13,8 +14,8 @@ const addAbonement = async (client, order, maxLessons) => {
 
         const abonement = new Abonement({
             client,
-            startDate,
-            endDate,
+            startDate: clearTimeInDate(startDate),
+            endDate: clearTimeInDate(endDate),
             maxLessons,
             order,
         });
