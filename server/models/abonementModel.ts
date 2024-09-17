@@ -20,11 +20,13 @@ const AbonementSchema = new Schema(
             type: Number,
             required: true,
         },
-        usedLessons: {
-            type: Number,
-            required: true,
-            default: 0,
-        },
+        // usedLessons: [
+        //     {
+        //         type: Schema.Types.ObjectId,
+        //         ref: 'ScheduleLog',
+        //         required: true,
+        //     },
+        // ],
         order: {
             type: Schema.Types.ObjectId,
             ref: 'Order',
