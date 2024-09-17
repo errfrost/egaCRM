@@ -27,25 +27,25 @@ const ScheduleSchema = new Schema(
             type: String, // typical, rent, service
             required: true,
         },
-        clients: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'Client',
-            },
-        ],
-        // в payment содержится массив стоимостей, которые инструктор получает с каждого отмеченного клиента
-        clientPayment: [
-            {
-                type: Number,
-                required: true,
-            },
-        ],
-        clientsInLine: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'Client',
-            },
-        ],
+        // clients: [
+        //     {
+        //         type: Schema.Types.ObjectId,
+        //         ref: 'Client',
+        //     },
+        // ],
+        // // в payment содержится массив стоимостей, которые инструктор получает с каждого отмеченного клиента
+        // clientPayment: [
+        //     {
+        //         type: Number,
+        //         required: true,
+        //     },
+        // ],
+        // clientsInLine: [
+        //     {
+        //         type: Schema.Types.ObjectId,
+        //         ref: 'Client',
+        //     },
+        // ],
     },
     { timestamps: true }
 );
