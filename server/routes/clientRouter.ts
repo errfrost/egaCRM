@@ -4,11 +4,13 @@ import {
     getClients,
     getClient,
     updateClient,
+    findClients
 } from '../controllers/clientController.js';
 
 const router = Router();
 
 router.post('/add', addClient); // Add new Client
+router.post('/find', findClients); // find Clients by searchText
 router.get('/', getClients); // Get all Clients
 router.get('/:clientNumber', getClient); // Get client by clientNumber
 router.put('/:clientNumber', updateClient); // Update client

@@ -158,3 +158,33 @@ export const getClient = async (req: Request, res: Response) => {
         return res.status(400).json({ message: error });
     }
 };
+
+// findClients by search request
+export const findClients = async (req: Request, res: Response) => {
+    try {
+        let { searchText } = req.body;
+        searchText = searchText.replace(/\s+/g, ''); // remove spaces from the search text
+
+        const clientsByLastname = await Client.find({
+            lastname: new RegExp(searchText, 'i'),
+        });
+        const clientsByClientNumber = await Client.find({
+            clientNumber: new RegExp(searchText, 'i'),
+        });
+        // const clientsByPhone = await Client.find({ clientNumber: searchText });
+
+        const clients = [...clientsByLastname, ...clientsByClientNumber];
+
+        if (!clients)
+            return res.status(402).json({
+                message: 'Клиентов по вашему запросу не найдено',
+            });
+
+        return res.json({
+            clients,
+            message: 'Получен список клиентов',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
