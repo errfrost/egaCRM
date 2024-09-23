@@ -16,12 +16,10 @@ const ScheduleLogSchema = new Schema(
         abonement: {
             type: Schema.Types.ObjectId,
             ref: 'Abonement',
-            required: true,
         },
         payment: {
             // стоимость занятия для клиента
             type: Number,
-            required: true,
             default: 0,
         },
         status: {

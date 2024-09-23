@@ -39,7 +39,7 @@ app.use('/api/order', orderRouter);
 app.use('/api/teacher', teacherRouter);
 app.use('/api/abonement', abonementRouter);
 app.use('/api/schedule/template', scheduleTemplateRouter);
-app.use('/api/schedulelog', scheduleRouter);
+app.use('/api/schedulelog', scheduleLogRouter);
 app.use('/api/schedule', scheduleRouter);
 
 async function start() {
