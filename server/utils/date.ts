@@ -16,3 +16,7 @@ export function clearTimeInDate(date: Date) {
     );
     return convertedDate;
 }
+
+export function isDateBeforeToday(date: Date) {
+    return new Date(date.toDateString()) < new Date(new Date().toDateString());
+}

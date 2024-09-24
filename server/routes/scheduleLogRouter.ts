@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
     addClientToScheduleLog,
+    updateClientVisitInScheduleRecord,
     getScheduleLog,
     removeClientFromScheduleLog,
 } from '../controllers/scheduleLogController.js';
@@ -13,6 +14,6 @@ router.post('/add', addClientToScheduleLog);
 router.get('/:scheduleID', getScheduleLog);
 // router.put('/:scheduleID', updateTimeRecord);
 router.delete('/:scheduleLogID', removeClientFromScheduleLog);
-// router.post('/add', addTimeRecord);
+router.put('/:scheduleLogID', updateClientVisitInScheduleRecord);
 
 export default router;
