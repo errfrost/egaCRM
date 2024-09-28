@@ -14,6 +14,7 @@ export const addClient = async (req: Request, res: Response) => {
             birthDate,
             phone,
             email,
+            instagram,
             comment,
         } = req.body;
         const admin = req.headers.Admin;
@@ -39,6 +40,7 @@ export const addClient = async (req: Request, res: Response) => {
             birthDate,
             phone,
             email,
+            instagram,
             comment,
             admin: adminObjectId!._id,
         });
@@ -65,6 +67,7 @@ export const updateClient = async (req: Request, res: Response) => {
             birthDate,
             phone,
             email,
+            instagram,
             comment,
         } = req.body;
         const admin = req.headers.Admin;
@@ -101,6 +104,7 @@ export const updateClient = async (req: Request, res: Response) => {
         client.birthDate = birthDate;
         client.phone = phone;
         client.email = email;
+        client.instagram = instagram;
         client.comment = comment;
         client.admin = adminObjectId!._id;
 

@@ -29,6 +29,10 @@ const ClientSchema = new Schema(
             type: String,
             required: false,
         },
+        instagram: {
+            type: String,
+            required: false,
+        },
         comment: {
             type: String,
             required: false,
