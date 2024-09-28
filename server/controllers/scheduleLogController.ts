@@ -36,7 +36,7 @@ export const getScheduleLog = async (req: Request, res: Response) => {
 export const addClientToScheduleLog = async (req: Request, res: Response) => {
     try {
         // const {  } = req.params;
-        const { clientNumber, scheduleID } = req.body;
+        const { clientID, scheduleID } = req.body;
 
         const timeRecord = await Schedule.findById(scheduleID);
         if (!timeRecord)
@@ -44,7 +44,7 @@ export const addClientToScheduleLog = async (req: Request, res: Response) => {
                 message: 'Записи в расписании по вашему запросу не найдено',
             });
 
-        const client = await Client.findOne({ clientNumber });
+        const client = await Client.findById(clientID);
         if (!client)
             return res.status(402).json({
                 message: 'Клиента по вашему запросу не найдено',

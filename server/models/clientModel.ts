@@ -5,8 +5,6 @@ const ClientSchema = new Schema(
     {
         clientNumber: {
             type: String,
-            required: true,
-            unique: true,
         },
         firstname: {
             type: String,

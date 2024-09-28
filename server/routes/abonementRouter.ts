@@ -7,6 +7,6 @@ import {
 const router = Router();
 
 router.get('/', getAbonements);
-router.get('/:clientNumber', getClientAbonements);
+router.get('/:clientID', getClientAbonements);
 
 export default router;

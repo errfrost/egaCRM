@@ -9,11 +9,10 @@ import addAbonement from '../utils/abonementUtils.js';
 // SellProduct при условии передачи корзины поэлементно
 export const sellProduct2Client = async (req: Request, res: Response) => {
     try {
-        const { clientNumber, productID, productPrice, count, admin } =
-            req.body;
+        const { clientID, productID, productPrice, count, admin } = req.body;
         const summ = productPrice * count;
         const adminID = await Admin.findOne({ username: admin });
-        const client = await Client.findOne({ clientNumber });
+        const client = await Client.findById(clientID);
         const product = await Product.findById(productID);
 
         if (!adminID)
@@ -40,7 +39,7 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
                 .json({ message: 'Недостаточно товара на складе' });
 
         const newOrder = new Order({
-            client: client._id,
+            client: clientID,
             product: productID,
             summ,
             count,
@@ -58,11 +57,7 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
             _id: product.category,
         });
         if (productCategory?.abonement) {
-            addAbonement(
-                client._id,
-                newOrder._id,
-                product.abonementLessonsCount
-            );
+            addAbonement(clientID, newOrder._id, product.abonementLessonsCount);
         }
 
         return res.json({

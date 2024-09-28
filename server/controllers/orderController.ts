@@ -27,10 +27,10 @@ export const getOrders = async (req: Request, res: Response) => {
 // GetClientOrders
 export const getClientOrders = async (req: Request, res: Response) => {
     try {
-        const { clientNumber } = req.params;
-        const clientID = await Client.findOne({ clientNumber });
+        const { clientID } = req.params;
+        const client = await Client.findById(clientID);
 
-        if (!clientID)
+        if (!client)
             return res.status(402).json({
                 message: 'Клиент не найден',
             });

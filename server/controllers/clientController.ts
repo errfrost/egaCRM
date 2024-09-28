@@ -56,7 +56,7 @@ export const addClient = async (req: Request, res: Response) => {
 // UpdateClient
 export const updateClient = async (req: Request, res: Response) => {
     try {
-        const clientID = req.params.clientNumber;
+        const { clientID } = req.params;
         const {
             clientNumber,
             firstname,
@@ -70,9 +70,7 @@ export const updateClient = async (req: Request, res: Response) => {
         const admin = req.headers.Admin;
         const adminObjectId = await Admin.findOne({ username: admin });
 
-        const client = await Client.findOne({
-            clientNumber: clientID,
-        });
+        const client = await Client.findById(clientID);
         if (!client)
             return res.status(402).json({
                 message: 'Клиент по вашему запросу не найден',
@@ -138,9 +136,9 @@ export const getClients = async (req: Request, res: Response) => {
 // GetClientInfo
 export const getClient = async (req: Request, res: Response) => {
     try {
-        const { clientNumber } = req.params;
+        const { clientID } = req.params;
 
-        const client = await Client.findOne({ clientNumber });
+        const client = await Client.findById(clientID);
 
         if (!client)
             return res.status(402).json({
