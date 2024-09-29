@@ -26,10 +26,16 @@ export const addClient = async (req: Request, res: Response) => {
                 message:
                     'Пользователь с данным клиентским номером уже существует',
             });
-        const isUsed = await Client.findOne({ firstname, lastname });
+        const isUsed = await Client.findOne({ firstname, lastname, birthDate });
         if (isUsed)
             return res.status(402).json({
                 message: 'Пользователь с данным именем уже существует',
+            });
+        const isUsedPhone = await Client.findOne({ phone });
+        if (isUsedPhone)
+            return res.status(402).json({
+                message:
+                    'Пользователь с данным номером телефона уже существует',
             });
 
         const client = new Client({
@@ -91,10 +97,22 @@ export const updateClient = async (req: Request, res: Response) => {
             });
 
         // Checking if we are trying to use already used firstname and lastname combo
-        const isUsedName = await Client.findOne({ firstname, lastname });
+        const isUsedName = await Client.findOne({
+            firstname,
+            lastname,
+            birthDate,
+        });
         if (isUsedName && client._id.toString() !== isUsedName._id.toString())
             return res.status(402).json({
                 message: 'Пользователь с данным именем уже существует',
+            });
+
+        // Checking if we are trying to use already used phone number
+        const isUsedPhone = await Client.findOne({ phone });
+        if (isUsedPhone && client._id.toString() !== isUsedPhone._id.toString())
+            return res.status(402).json({
+                message:
+                    'Пользователь с данным номером телефона уже существует',
             });
 
         client.clientNumber = clientNumber;
