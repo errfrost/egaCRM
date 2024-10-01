@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Client from '../models/clientModel.js';
 import Admin from '../models/adminModel.js';
+import ScheduleLog from '../models/scheduleLogModel.js';
 import getAdmin from '../utils/adminUtils.js';
 
 // AddClient
@@ -207,6 +208,39 @@ export const findClients = async (req: Request, res: Response) => {
         return res.json({
             clients,
             message: 'Получен список клиентов',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
+export const getClientVisitLogs = async (req: Request, res: Response) => {
+    try {
+        const { clientID } = req.params;
+
+        const client = await Client.findById(clientID);
+
+        if (!client)
+            return res.status(402).json({
+                message: 'Клиента по вашему запросу не найдено',
+            });
+
+        const log = await ScheduleLog.find({ client: clientID, status: true })
+            .populate('client')
+            // .populate('schedule');
+            .populate({
+                path: 'schedule',
+                populate: [{ path: 'teacher', select: 'lastname firstname' }],
+            });
+
+        if (!log)
+            return res.status(402).json({
+                message: 'Записей о посещениях клиента не найдено',
+            });
+
+        return res.json({
+            log,
+            message: 'Получены данные о посещениях клиента',
         });
     } catch (error) {
         return res.status(400).json({ message: error });
