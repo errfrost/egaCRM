@@ -9,11 +9,24 @@ import addAbonement from '../utils/abonementUtils.js';
 // SellProduct при условии передачи корзины поэлементно
 export const sellProduct2Client = async (req: Request, res: Response) => {
     try {
-        const { clientID, productID, productPrice, count, admin } = req.body;
+        const {
+            clientID,
+            productID,
+            productPrice,
+            count,
+            status,
+            discount,
+            fullCartPaymentSum,
+            paymentMethod,
+            comment,
+            admin,
+        } = req.body;
         const summ = productPrice * count;
         const adminID = await Admin.findOne({ username: admin });
         const client = await Client.findById(clientID);
-        const product = await Product.findById(productID);
+        const product = await Product.findById(productID)
+            .populate('category')
+            .exec();
 
         if (!adminID)
             return res.status(402).json({
@@ -33,6 +46,10 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
 
         if (!product.active)
             return res.status(400).json({ message: 'Товар не доступен' });
+        if (!product.category.active)
+            return res
+                .status(400)
+                .json({ message: 'Категория выбранного товара не доступна' });
         if (product.count - count < 0)
             return res
                 .status(400)
@@ -43,6 +60,11 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
             product: productID,
             summ,
             count,
+            status,
+            discount,
+            fullCartPaymentSum,
+            paymentMethod,
+            comment,
             admin: adminID._id,
         });
 

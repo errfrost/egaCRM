@@ -12,6 +12,7 @@ const OrderSchema = new Schema(
             ref: 'Product',
             required: true,
         },
+        // стоимость выбранного товара*количество с учетом скидки
         summ: {
             type: Number,
             required: true,
@@ -24,6 +25,24 @@ const OrderSchema = new Schema(
             type: String,
             required: true,
             default: 'ok', // 'canceled', 'credit'
+        },
+        discount: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
+        // внесенная сумма, которую клиент оплатил за весь заказ
+        fullCartPaymentSum: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
+        paymentMethod: {
+            type: String,
+            required: true,
+        },
+        comment: {
+            type: String,
         },
         admin: {
             type: Schema.Types.ObjectId,
