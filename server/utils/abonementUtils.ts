@@ -1,4 +1,5 @@
 import Abonement from '../models/abonementModel.js';
+import ScheduleLog from '../models/scheduleLogModel.js';
 import { clearTimeInDate } from './date.js';
 
 const addAbonement = async (client, order, maxLessons) => {
@@ -22,6 +23,18 @@ const addAbonement = async (client, order, maxLessons) => {
         abonement.save();
 
         return abonement;
+    } catch (error) {
+        return error;
+    }
+};
+
+export const countUsedLessonsInAbonement = async (abonementID) => {
+    try {
+        const lessons = await ScheduleLog.find({
+            abonement: abonementID,
+            status: true,
+        });
+        return lessons.length;
     } catch (error) {
         return error;
     }
