@@ -56,3 +56,35 @@ export const getClientAbonements = async (req: Request, res: Response) => {
         return res.status(400).json({ message: error });
     }
 };
+
+// UpdateClientAbonement
+export const updateClientAbonement = async (req: Request, res: Response) => {
+    try {
+        const { abonementID } = req.params;
+        const { comment, startDate, endDate } = req.body;
+        const abonement = await Abonement.findById(abonementID)
+            .populate('client')
+            .populate({
+                path: 'order',
+                populate: [{ path: 'product', select: 'name' }],
+            })
+            .exec();
+
+        if (!abonement)
+            return res.status(402).json({
+                message: 'Абонемент не найден',
+            });
+
+        abonement.comment = comment;
+        abonement.startDate = startDate;
+        abonement.endDate = endDate;
+
+        await abonement.save();
+        return res.json({
+            abonement,
+            message: 'Внесены изменения в абонемент',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
