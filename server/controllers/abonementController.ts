@@ -1,16 +1,48 @@
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 import Client from '../models/clientModel.js';
 import Abonement from '../models/abonementModel.js';
+import Order from '../models/orderModel.js';
+import scheduleLog from '../models/scheduleLogModel.js';
 
 export const getAbonements = async (req: Request, res: Response) => {
     try {
-        const abonements = await Abonement.find()
-            .populate('client')
-            .populate({
-                path: 'order',
-                populate: [{ path: 'product', select: 'name' }],
-            })
-            .exec();
+        // const abonements = await Abonement.find()
+        //     .populate('client')
+        //     .populate({
+        //         path: 'order',
+        //         populate: [{ path: 'product', select: 'name' }],
+        //     })
+        //     .exec();
+
+        const abonements = await Abonement.aggregate([
+            {
+                $lookup: {
+                    from: 'schedulelogs',
+                    pipeline: [
+                        {
+                            $match: {
+                                status: { $eq: true },
+                            },
+                        },
+                    ],
+                    localField: '_id',
+                    foreignField: 'abonement',
+                    as: 'visits',
+                },
+            },
+            {
+                $addFields: {
+                    usedLessons: { $size: '$visits' },
+                },
+            },
+        ]);
+        await Client.populate(abonements, { path: 'client' });
+        await Order.populate(abonements, {
+            path: 'order',
+            populate: [{ path: 'product', select: 'name' }],
+        });
+
         if (!abonements)
             return res.status(402).json({
                 message: 'Абонементов не найдено',
@@ -36,13 +68,42 @@ export const getClientAbonements = async (req: Request, res: Response) => {
                 message: 'Клиент не найден',
             });
 
-        const abonements = await Abonement.find({ client: clientID })
-            .populate('client')
-            .populate({
-                path: 'order',
-                populate: [{ path: 'product', select: 'name' }],
-            })
-            .exec();
+        // const abonements = await Abonement.find({ client: clientID })
+        //     .populate('client')
+        //     .populate({
+        //         path: 'order',
+        //         populate: [{ path: 'product', select: 'name' }],
+        //     })
+        //     .exec();
+        const abonements = await Abonement.aggregate([
+            { $match: { client: new mongoose.Types.ObjectId(clientID) } }, // тут еще надо считать записи где status true
+            {
+                $lookup: {
+                    from: 'schedulelogs',
+                    pipeline: [
+                        {
+                            $match: {
+                                status: { $eq: true },
+                            },
+                        },
+                    ],
+                    localField: '_id',
+                    foreignField: 'abonement',
+                    as: 'visits',
+                },
+            },
+            {
+                $addFields: {
+                    usedLessons: { $size: '$visits' },
+                },
+            },
+        ]);
+        await Client.populate(abonements, { path: 'client' });
+        await Order.populate(abonements, {
+            path: 'order',
+            populate: [{ path: 'product', select: 'name' }],
+        });
+
         if (!abonements)
             return res.status(402).json({
                 message: 'Абонементов не найдено',
