@@ -152,33 +152,6 @@ export const updateClient = async (req: Request, res: Response) => {
     }
 };
 
-// UpdateClientBalance
-export const updateClientBalance = async (req: Request, res: Response) => {
-    try {
-        const { clientID } = req.params;
-        const { balance } = req.body;
-        const admin = req.headers.Admin;
-        const adminObjectId = await Admin.findOne({ username: admin });
-
-        const client = await Client.findById(clientID);
-        if (!client)
-            return res.status(402).json({
-                message: 'Клиент по вашему запросу не найден',
-            });
-
-        client.admin = adminObjectId!._id;
-        client.balance = balance;
-
-        await client.save();
-        return res.json({
-            client,
-            message: 'Баланс клиента изменен',
-        });
-    } catch (error) {
-        return res.status(400).json({ message: error });
-    }
-};
-
 // GetClients
 export const getClients = async (req: Request, res: Response) => {
     try {

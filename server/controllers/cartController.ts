@@ -10,6 +10,7 @@ import addAbonement from '../utils/abonementUtils.js';
 export const sellProduct2Client = async (req: Request, res: Response) => {
     try {
         const {
+            orderNumber,
             clientID,
             productID,
             productPrice,
@@ -56,6 +57,7 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
                 .json({ message: 'Недостаточно товара на складе' });
 
         const newOrder = new Order({
+            orderNumber,
             client: clientID,
             product: productID,
             summ,
@@ -91,6 +93,4 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
     }
 };
 
-export const unsellProduct2Client = async (req: Request, res: Response) => {
-    return res.status(400).json({ message: 'unsell' });
-};
+export default sellProduct2Client;

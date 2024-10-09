@@ -3,6 +3,10 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 const OrderSchema = new Schema(
     {
+        orderNumber: {
+            type: Number,
+            required: true,
+        },
         client: {
             type: Schema.Types.ObjectId,
             ref: 'Client',

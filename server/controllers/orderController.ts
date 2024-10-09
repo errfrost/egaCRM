@@ -5,6 +5,24 @@ import Client from '../models/clientModel.js';
 import Abonement from '../models/abonementModel.js';
 import { countUsedLessonsInAbonement } from '../utils/abonementUtils.js';
 
+// GetNewOrderNumber
+export const getNewOrderNumber = async (req: Request, res: Response) => {
+    try {
+        let newOrderNumber = 0;
+        const lastOrderNumber = await Order.findOne().sort('-orderNumber');
+        if (lastOrderNumber && lastOrderNumber.orderNumber)
+            newOrderNumber = lastOrderNumber.orderNumber;
+        newOrderNumber += 1;
+
+        return res.json({
+            newOrderNumber,
+            message: 'Получен список продаж',
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
 // GetOrders
 export const getOrders = async (req: Request, res: Response) => {
     try {
