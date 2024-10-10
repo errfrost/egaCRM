@@ -238,7 +238,7 @@ export const getClientVisitLogs = async (req: Request, res: Response) => {
 
         const log = await ScheduleLog.find({ client: clientID, status: true })
             .populate('client')
-            // .populate('schedule');
+            .populate({ path: 'abonement', select: '_id maxLessons' })
             .populate({
                 path: 'schedule',
                 populate: [{ path: 'teacher', select: 'lastname firstname' }],
