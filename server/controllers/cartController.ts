@@ -14,7 +14,7 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
             clientID,
             productID,
             productPrice,
-            count,
+            // count,
             status,
             discount,
             fullCartPaymentSum,
@@ -22,7 +22,7 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
             comment,
             admin,
         } = req.body;
-        const summ = productPrice * count;
+        const summ = productPrice * 1;
         const adminID = await Admin.findOne({ username: admin });
         const client = await Client.findById(clientID);
         const product = await Product.findById(productID)
@@ -51,7 +51,7 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
             return res
                 .status(400)
                 .json({ message: 'Категория выбранного товара не доступна' });
-        if (product.count - count < 0)
+        if (product.count - 1 < 0)
             return res
                 .status(400)
                 .json({ message: 'Недостаточно товара на складе' });
@@ -61,7 +61,7 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
             client: clientID,
             product: productID,
             summ,
-            count,
+            // count,
             status,
             discount,
             fullCartPaymentSum,
@@ -73,7 +73,7 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
         await newOrder.save();
 
         // отнять количество товара из наличия
-        product.count -= count;
+        product.count -= 1;
         await product.save();
 
         // проверить если товар - это абонемент, то добавить в абонемент запись
