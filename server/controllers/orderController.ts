@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import moment from 'moment';
 import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
 import Client from '../models/clientModel.js';
@@ -26,7 +27,17 @@ export const getNewOrderNumber = async (req: Request, res: Response) => {
 // GetOrders
 export const getOrders = async (req: Request, res: Response) => {
     try {
-        const orders = await Order.find()
+        const { startDate, endDate } = req.query;
+        const orders = await Order.find({
+            createdAt: {
+                $gte: moment(new Date(startDate)).format(
+                    'YYYY-MM-DD[T00:00:00.000Z]'
+                ),
+                $lte: moment(new Date(endDate)).format(
+                    'YYYY-MM-DD[T23:59:59.000Z]'
+                ),
+            },
+        })
             .populate('client')
             // .populate('product')
             .populate({
