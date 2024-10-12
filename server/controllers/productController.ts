@@ -88,11 +88,18 @@ export const updateProduct = async (req: Request, res: Response) => {
 // GetProducts
 export const getProducts = async (req: Request, res: Response) => {
     try {
-        const products = await Product.find().populate('category').exec();
+        let products = await Product.find().populate({
+            path: 'category',
+            match: {
+                active: true,
+            },
+        });
+        //        .populate('category').exec();
         if (!products)
             return res.status(402).json({
                 message: 'Товаров не найдено',
             });
+        products = products.filter((product) => product.category !== null);
 
         return res.json({
             products,

@@ -55,12 +55,12 @@ export const getOrders = async (req: Request, res: Response) => {
             .populate('client')
             .populate('admin')
             .exec();
-        orders = orders.filter((order) => order.product !== null);
 
         if (!orders)
             return res.status(402).json({
                 message: 'Продаж не найдено',
             });
+        orders = orders.filter((order) => order.product !== null);
 
         return res.json({
             orders,
