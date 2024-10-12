@@ -27,8 +27,9 @@ export const getNewOrderNumber = async (req: Request, res: Response) => {
 // GetOrders
 export const getOrders = async (req: Request, res: Response) => {
     try {
-        const { startDate, endDate } = req.query;
-        const orders = await Order.find({
+        const { startDate, endDate, searchText, category } = req.query;
+
+        let orders = await Order.find({
             createdAt: {
                 $gte: moment(new Date(startDate)).format(
                     'YYYY-MM-DD[T00:00:00.000Z]'
@@ -38,14 +39,24 @@ export const getOrders = async (req: Request, res: Response) => {
                 ),
             },
         })
-            .populate('client')
-            // .populate('product')
             .populate({
                 path: 'product',
+                match: {
+                    name: new RegExp(searchText, 'i'),
+                    category:
+                        category !== ''
+                            ? category
+                            : {
+                                  $exists: true,
+                              },
+                },
                 populate: [{ path: 'category', select: 'abonement' }],
             })
+            .populate('client')
             .populate('admin')
             .exec();
+        orders = orders.filter((order) => order.product !== null);
+
         if (!orders)
             return res.status(402).json({
                 message: 'Продаж не найдено',
