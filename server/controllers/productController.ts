@@ -88,13 +88,20 @@ export const updateProduct = async (req: Request, res: Response) => {
 // GetProducts
 export const getProducts = async (req: Request, res: Response) => {
     try {
-        let products = await Product.find().populate({
+        const { searchText } = req.query;
+        let products = await Product.find({
+            name:
+                searchText !== ''
+                    ? new RegExp(searchText, 'i')
+                    : {
+                          $exists: true,
+                      },
+        }).populate({
             path: 'category',
             match: {
                 active: true,
             },
         });
-        //        .populate('category').exec();
         if (!products)
             return res.status(402).json({
                 message: 'Товаров не найдено',
