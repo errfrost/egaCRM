@@ -79,7 +79,7 @@ export const getProductCategories = async (req: Request, res: Response) => {
             message: 'Получен список категорий',
         });
     } catch (error) {
-        return res.status(400).json({ mes: '1', message: error });
+        return res.status(400).json({ message: error });
     }
 };
 

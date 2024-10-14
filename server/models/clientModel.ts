@@ -46,6 +46,7 @@ const ClientSchema = new Schema(
         clientType: {
             type: Schema.Types.ObjectId,
             ref: 'ClientType',
+            required: true,
         },
         balance: {
             type: Number,

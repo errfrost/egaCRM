@@ -17,7 +17,7 @@ export const addClient = async (req: Request, res: Response) => {
             email,
             instagram,
             comment,
-            balance,
+            clientType,
         } = req.body;
         const admin = req.headers.Admin;
         const adminObjectId = await Admin.findOne({ username: admin });
@@ -51,7 +51,7 @@ export const addClient = async (req: Request, res: Response) => {
             instagram,
             comment,
             admin: adminObjectId!._id,
-            balance,
+            clientType,
         });
 
         await client.save();
@@ -79,6 +79,7 @@ export const updateClient = async (req: Request, res: Response) => {
             instagram,
             comment,
             balance,
+            clientType,
         } = req.body;
         const admin = req.headers.Admin;
         const adminObjectId = await Admin.findOne({ username: admin });
@@ -89,14 +90,14 @@ export const updateClient = async (req: Request, res: Response) => {
                 message: 'Клиент по вашему запросу не найден',
             });
 
-        if (balance || balance === 0) {
+        if (!firstname && (balance || balance === 0)) {
             client.admin = adminObjectId!._id;
-            client.balance = balance;
+            client.balance += balance;
 
             await client.save();
             return res.json({
                 client,
-                message: 'Данные клиента изменены',
+                message: 'Баланс клиента изменен',
             });
         }
 
@@ -140,7 +141,7 @@ export const updateClient = async (req: Request, res: Response) => {
         client.instagram = instagram;
         client.comment = comment;
         client.admin = adminObjectId!._id;
-        client.balance = balance;
+        client.clientType = clientType;
 
         await client.save();
         return res.json({
