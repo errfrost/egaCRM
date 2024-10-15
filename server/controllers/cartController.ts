@@ -14,7 +14,6 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
             clientID,
             productID,
             productPrice,
-            // count,
             status,
             discount,
             fullCartPaymentSum,
@@ -61,7 +60,6 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
             client: clientID,
             product: productID,
             summ,
-            // count,
             status,
             discount,
             fullCartPaymentSum,
@@ -70,11 +68,12 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
             admin: adminID._id,
         });
 
-        await newOrder.save();
-
-        // отнять количество товара из наличия
-        product.count -= 1;
-        await product.save();
+        await newOrder.save().then(async () => {
+            // отнять количество товара из наличия
+            product.count -= 1;
+            console.log(product.count);
+            await product.save();
+        });
 
         // проверить если товар - это абонемент, то добавить в абонемент запись
         const productCategory = await ProductCategory.findOne({
