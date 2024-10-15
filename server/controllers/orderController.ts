@@ -27,34 +27,65 @@ export const getNewOrderNumber = async (req: Request, res: Response) => {
 // GetOrders
 export const getOrders = async (req: Request, res: Response) => {
     try {
-        const { startDate, endDate, searchText, category } = req.query;
+        const { startDate, endDate, searchText, category, status } = req.query;
 
-        let orders = await Order.find({
-            createdAt: {
-                $gte: moment(new Date(startDate)).format(
-                    'YYYY-MM-DD[T00:00:00.000Z]'
-                ),
-                $lte: moment(new Date(endDate)).format(
-                    'YYYY-MM-DD[T23:59:59.000Z]'
-                ),
-            },
-        })
-            .populate({
-                path: 'product',
-                match: {
-                    name: new RegExp(searchText, 'i'),
-                    category:
-                        category !== ''
-                            ? category
-                            : {
-                                  $exists: true,
-                              },
+        let orders;
+        if (status === 'cancel') {
+            orders = await Order.find({
+                updatedAt: {
+                    $gte: moment(new Date(startDate)).format(
+                        'YYYY-MM-DD[T00:00:00.000Z]'
+                    ),
+                    $lte: moment(new Date(endDate)).format(
+                        'YYYY-MM-DD[T23:59:59.000Z]'
+                    ),
                 },
-                populate: [{ path: 'category', select: 'abonement' }],
+                status: 'cancel',
             })
-            .populate('client')
-            .populate('admin')
-            .exec();
+                .populate({
+                    path: 'product',
+                    match: {
+                        name: new RegExp(searchText, 'i'),
+                        category:
+                            category !== ''
+                                ? category
+                                : {
+                                      $exists: true,
+                                  },
+                    },
+                    populate: [{ path: 'category', select: 'abonement' }],
+                })
+                .populate('client')
+                .populate('admin')
+                .exec();
+        } else {
+            orders = await Order.find({
+                createdAt: {
+                    $gte: moment(new Date(startDate)).format(
+                        'YYYY-MM-DD[T00:00:00.000Z]'
+                    ),
+                    $lte: moment(new Date(endDate)).format(
+                        'YYYY-MM-DD[T23:59:59.000Z]'
+                    ),
+                },
+            })
+                .populate({
+                    path: 'product',
+                    match: {
+                        name: new RegExp(searchText, 'i'),
+                        category:
+                            category !== ''
+                                ? category
+                                : {
+                                      $exists: true,
+                                  },
+                    },
+                    populate: [{ path: 'category', select: 'abonement' }],
+                })
+                .populate('client')
+                .populate('admin')
+                .exec();
+        }
 
         if (!orders)
             return res.status(402).json({
