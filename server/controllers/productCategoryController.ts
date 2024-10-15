@@ -4,7 +4,7 @@ import ProductCategory from '../models/productCategoryModel.js';
 // AddCategory
 export const addProductCategory = async (req: Request, res: Response) => {
     try {
-        const { category, description, abonement } = req.body;
+        const { category, description, abonement, service } = req.body;
 
         const isUsed = await ProductCategory.findOne({ category });
         if (isUsed)
@@ -16,11 +16,12 @@ export const addProductCategory = async (req: Request, res: Response) => {
             category,
             description,
             abonement,
+            service
         });
 
         await newCategory.save();
         return res.json({
-            newCategory,
+            category: newCategory,
             message: 'Добавлена новая категория',
         });
     } catch (error) {
@@ -32,7 +33,7 @@ export const addProductCategory = async (req: Request, res: Response) => {
 export const updateProductCategory = async (req: Request, res: Response) => {
     try {
         const { categoryID } = req.params;
-        const { category, description, abonement, active } = req.body;
+        const { category, description, abonement, active, service } = req.body;
 
         const updatedCategory = await ProductCategory.findOne({
             _id: categoryID,
@@ -53,6 +54,7 @@ export const updateProductCategory = async (req: Request, res: Response) => {
         updatedCategory.description = description;
         updatedCategory.abonement = abonement;
         updatedCategory.active = active;
+        updatedCategory.service = service;
 
         await updatedCategory.save();
         return res.json({
