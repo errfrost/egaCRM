@@ -53,7 +53,9 @@ export const getOrders = async (req: Request, res: Response) => {
                                       $exists: true,
                                   },
                     },
-                    populate: [{ path: 'category', select: 'abonement' }],
+                    populate: [
+                        { path: 'category', select: 'abonement service' },
+                    ],
                 })
                 .populate('client')
                 .populate('admin')
@@ -80,7 +82,9 @@ export const getOrders = async (req: Request, res: Response) => {
                                       $exists: true,
                                   },
                     },
-                    populate: [{ path: 'category', select: 'abonement' }],
+                    populate: [
+                        { path: 'category', select: 'abonement service' },
+                    ],
                 })
                 .populate('client')
                 .populate('admin')
@@ -118,7 +122,7 @@ export const getClientOrders = async (req: Request, res: Response) => {
             // .populate('product')
             .populate({
                 path: 'product',
-                populate: [{ path: 'category', select: 'abonement' }],
+                populate: [{ path: 'category', select: 'abonement service' }],
             })
             .populate('admin')
             .exec();
@@ -140,13 +144,12 @@ export const getClientOrders = async (req: Request, res: Response) => {
 export const updateClientOrder = async (req: Request, res: Response) => {
     try {
         const { orderID } = req.params;
-        const { status, comment, returnProduct, abonement } = req.body;
+        const { status, comment, returnProduct, service, abonement } = req.body;
         const order = await Order.findById(orderID)
             .populate('client')
-            // .populate('product')
             .populate({
                 path: 'product',
-                populate: [{ path: 'category', select: 'abonement' }],
+                populate: [{ path: 'category', select: 'service' }],
             })
             .populate('admin')
             .exec();

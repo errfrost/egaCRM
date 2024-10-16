@@ -50,7 +50,7 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
             return res
                 .status(400)
                 .json({ message: 'Категория выбранного товара не доступна' });
-        if (product.count - 1 < 0)
+        if (product.count - 1 < 0 && !product.category.service)
             return res
                 .status(400)
                 .json({ message: 'Недостаточно товара на складе' });
@@ -70,8 +70,7 @@ export const sellProduct2Client = async (req: Request, res: Response) => {
 
         await newOrder.save().then(async () => {
             // отнять количество товара из наличия
-            product.count -= 1;
-            console.log(product.count);
+            if (!product.category.service) product.count -= 1;
             await product.save();
         });
 

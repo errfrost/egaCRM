@@ -52,9 +52,7 @@ export const updateProduct = async (req: Request, res: Response) => {
             active,
         } = req.body;
 
-        const product = await Product.findOne({
-            _id: productID,
-        });
+        const product = await Product.findOne({ _id: productID });
         if (!product)
             return res.status(402).json({
                 message: 'Товар не найден',
